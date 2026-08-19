@@ -1,4 +1,5 @@
 import { defineConfig } from "hardhat/config";
+import hardhatNodeTestRunner from "@nomicfoundation/hardhat-node-test-runner";
 import hardhatViem from "@nomicfoundation/hardhat-viem";
 import "@nomicfoundation/hardhat-verify";
 import * as dotenv from "dotenv";
@@ -24,7 +25,9 @@ if (!PRIVATE_KEY) throw new Error(`Missing PRIVATE_KEY in .env.${ENV}`);
 if (!CHAIN_ID) throw new Error(`Missing CHAIN_ID in .env.${ENV}`);
 
 export default defineConfig({
-    plugins: [hardhatViem],
+    // Sem o runner registrado, `hardhat test` não reconhece os arquivos de
+    // `test/` que usam `node:test` — e os testes existentes nunca rodavam.
+    plugins: [hardhatViem, hardhatNodeTestRunner],
     solidity: "0.8.20",
     networks: {
         app: {
